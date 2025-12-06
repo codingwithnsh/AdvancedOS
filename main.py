@@ -603,7 +603,7 @@ class AdvancedOS:
         
         tk.Label(about, text="AdvancedOS", bg=self.bg_color, fg=self.fg_color,
                 font=('Arial', 24, 'bold')).pack(pady=20)
-        tk.Label(about, text="Version 2.0", bg=self.bg_color, fg=self.fg_color,
+        tk.Label(about, text="Version 3.0 - The World's Best Python OS", bg=self.bg_color, fg=self.fg_color,
                 font=('Arial', 12)).pack()
         tk.Label(about, text=f"\nPlatform: {platform.system()} {platform.release()}",
                 bg=self.bg_color, fg=self.fg_color, font=('Arial', 10)).pack()
@@ -611,14 +611,14 @@ class AdvancedOS:
                 bg=self.bg_color, fg=self.fg_color, font=('Arial', 10)).pack()
         
         features_text = """
-        Features: 1000+
-        • File Management
-        • Text Editing & Code Editor
-        • Media Players (Music, Video, Photos)
-        • Internet Browser
-        • Email & Calendar
-        • System Monitor
-        • Calculator & Utilities
+        Features: 2500+
+        • Sandbox Isolation System
+        • App Store & Package Manager
+        • Time Machine Backups
+        • Voice Assistant & Cloud Sync
+        • Mission Control & Launchpad
+        • Developer Console & Tools
+        • File Management & Media Players
         • And much more!
         """
         tk.Label(about, text=features_text, bg=self.bg_color, fg=self.fg_color,
@@ -2062,12 +2062,18 @@ Python Version: {sys.version.split()[0]}
                 font=('Arial', 16, 'bold')).pack(anchor=tk.W, padx=20, pady=20)
         
         about_text = f"""
-AdvancedOS Version 2.0
+AdvancedOS Version 3.0 - The World's Best Python OS
 
-A modern, feature-rich operating system interface
+A comprehensive, modern operating system interface
 built with Python and Tkinter.
 
-Features: 1000+ and growing
+Features: 2500+ including:
+• Sandbox Isolation System
+• App Store & Time Machine
+• Voice Assistant & Cloud Sync
+• Developer Console & Tools
+• Mission Control & Enhanced Mac UI
+
 Platform: {platform.system()}
 Python: {sys.version.split()[0]}
 
