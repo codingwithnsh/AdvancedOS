@@ -37,9 +37,11 @@ try:
     from sandbox_dashboard import SandboxDashboard
     from mac_ui_enhancements import (MissionControl, Launchpad, HotCorners, 
                                      DockEnhancer, QuickLook, WindowSnapping, FocusModes)
+    from advanced_features import AppStore, TimeMachine, VoiceAssistant, CloudSync
 except ImportError:
     SandboxDashboard = MissionControl = Launchpad = None
     HotCorners = DockEnhancer = QuickLook = WindowSnapping = FocusModes = None
+    AppStore = TimeMachine = VoiceAssistant = CloudSync = None
 
 class AdvancedOS:
     def __init__(self, root):
@@ -79,6 +81,13 @@ class AdvancedOS:
         # Initialize Sandbox Dashboard
         if SandboxDashboard:
             self.sandbox_dashboard = SandboxDashboard(self.root, self)
+        
+        # Initialize Advanced Features
+        if AppStore:
+            self.app_store = AppStore(self.root, self)
+            self.time_machine = TimeMachine(self.root, self)
+            self.voice_assistant = VoiceAssistant(self.root, self)
+            self.cloud_sync = CloudSync(self.root, self)
         
         # Apply theme
         self.apply_theme()
@@ -205,7 +214,10 @@ class AdvancedOS:
                 ('Sandbox Manager', self.open_sandbox_manager),
                 ('Focus Modes', lambda: self.focus_modes.show_menu() if hasattr(self, 'focus_modes') else None),
                 ('---', None),
-                ('Quick Look', lambda: None),
+                ('App Store', lambda: self.app_store.show() if hasattr(self, 'app_store') else None),
+                ('Time Machine', lambda: self.time_machine.show() if hasattr(self, 'time_machine') else None),
+                ('Voice Assistant', lambda: self.voice_assistant.show() if hasattr(self, 'voice_assistant') else None),
+                ('Cloud Sync', lambda: self.cloud_sync.show_settings() if hasattr(self, 'cloud_sync') else None),
             ]),
         ]
         
@@ -264,6 +276,8 @@ class AdvancedOS:
             ('💻 Terminal', self.open_terminal),
             ('🔒 Sandboxes', self.open_sandbox_manager),
             ('🚀 Launchpad', lambda: self.launchpad.show() if hasattr(self, 'launchpad') else None),
+            ('🏪 App Store', lambda: self.app_store.show() if hasattr(self, 'app_store') else None),
+            ('⏰ Time Machine', lambda: self.time_machine.show() if hasattr(self, 'time_machine') else None),
         ]
         
         row, col = 0, 0
@@ -312,6 +326,9 @@ class AdvancedOS:
             ('🎵', 'Music', self.open_music_player),
             ('📷', 'Photos', self.open_photo_viewer),
             ('🔒', 'Sandboxes', self.open_sandbox_manager),
+            ('🏪', 'App Store', lambda: self.app_store.show() if hasattr(self, 'app_store') else None),
+            ('⏰', 'Time Machine', lambda: self.time_machine.show() if hasattr(self, 'time_machine') else None),
+            ('🎤', 'Assistant', lambda: self.voice_assistant.show() if hasattr(self, 'voice_assistant') else None),
             ('⚙️', 'Settings', self.open_settings),
             ('💻', 'Terminal', self.open_terminal),
             ('📊', 'Activity', self.open_activity_monitor),
