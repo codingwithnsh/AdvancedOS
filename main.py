@@ -32,6 +32,15 @@ try:
 except ImportError:
     plt = FigureCanvasTkAgg = animation = None
 
+# Import new modules
+try:
+    from sandbox_dashboard import SandboxDashboard
+    from mac_ui_enhancements import (MissionControl, Launchpad, HotCorners, 
+                                     DockEnhancer, QuickLook, WindowSnapping, FocusModes)
+except ImportError:
+    SandboxDashboard = MissionControl = Launchpad = None
+    HotCorners = DockEnhancer = QuickLook = WindowSnapping = FocusModes = None
+
 class AdvancedOS:
     def __init__(self, root):
         self.root = root
@@ -57,6 +66,19 @@ class AdvancedOS:
         self.current_user = self.settings.get('username', 'User')
         self.favorites = self.settings.get('favorites', [])
         self.recent_files = self.settings.get('recent_files', [])
+        
+        # Initialize Mac UI enhancements
+        if MissionControl:
+            self.mission_control = MissionControl(self.root, self)
+            self.launchpad = Launchpad(self.root, self)
+            self.hot_corners = HotCorners(self.root, self)
+            self.quick_look = QuickLook(self.root, self)
+            self.window_snapping = WindowSnapping(self.root, self)
+            self.focus_modes = FocusModes(self.root, self)
+        
+        # Initialize Sandbox Dashboard
+        if SandboxDashboard:
+            self.sandbox_dashboard = SandboxDashboard(self.root, self)
         
         # Apply theme
         self.apply_theme()
@@ -124,6 +146,12 @@ class AdvancedOS:
         self.root.bind('<Control-t>', lambda e: self.open_terminal())
         self.root.bind('<Alt-Tab>', lambda e: self.show_app_switcher())
         self.root.bind('<F11>', lambda e: self.toggle_fullscreen())
+        
+        # New shortcuts for Mac features
+        self.root.bind('<F3>', lambda e: self.mission_control.show() if hasattr(self, 'mission_control') else None)
+        self.root.bind('<F4>', lambda e: self.launchpad.show() if hasattr(self, 'launchpad') else None)
+        self.root.bind('<Control-space>', lambda e: self.open_spotlight())
+        self.root.bind('<Control-Shift-s>', lambda e: self.open_sandbox_manager())
     
     def toggle_fullscreen(self):
         """Toggle fullscreen mode"""
@@ -156,6 +184,9 @@ class AdvancedOS:
             ('View', [
                 ('Toggle Dark Mode', self.toggle_theme),
                 ('Notifications', self.show_notification_center),
+                ('---', None),
+                ('Mission Control', lambda: self.mission_control.show() if hasattr(self, 'mission_control') else None),
+                ('Launchpad', lambda: self.launchpad.show() if hasattr(self, 'launchpad') else None),
             ]),
             ('Go', [
                 ('Home', lambda: self.open_file_explorer()),
@@ -165,6 +196,16 @@ class AdvancedOS:
             ('Window', [
                 ('Minimize All', self.minimize_all),
                 ('Show All', self.show_all_windows),
+                ('---', None),
+                ('Hot Corners', lambda: self.hot_corners.configure() if hasattr(self, 'hot_corners') else None),
+                ('Snap Left', lambda: None),
+                ('Snap Right', lambda: None),
+            ]),
+            ('Tools', [
+                ('Sandbox Manager', self.open_sandbox_manager),
+                ('Focus Modes', lambda: self.focus_modes.show_menu() if hasattr(self, 'focus_modes') else None),
+                ('---', None),
+                ('Quick Look', lambda: None),
             ]),
         ]
         
@@ -221,6 +262,8 @@ class AdvancedOS:
             ('📋 Notes', self.open_notes),
             ('⚙️ Settings', self.open_settings),
             ('💻 Terminal', self.open_terminal),
+            ('🔒 Sandboxes', self.open_sandbox_manager),
+            ('🚀 Launchpad', lambda: self.launchpad.show() if hasattr(self, 'launchpad') else None),
         ]
         
         row, col = 0, 0
@@ -268,6 +311,7 @@ class AdvancedOS:
             ('📝', 'Notes', self.open_notes),
             ('🎵', 'Music', self.open_music_player),
             ('📷', 'Photos', self.open_photo_viewer),
+            ('🔒', 'Sandboxes', self.open_sandbox_manager),
             ('⚙️', 'Settings', self.open_settings),
             ('💻', 'Terminal', self.open_terminal),
             ('📊', 'Activity', self.open_activity_monitor),
@@ -2019,6 +2063,14 @@ Python: {sys.version.split()[0]}
         tk.Button(trash, text="Empty Trash", bg=self.accent_color, fg='white',
                  relief=tk.FLAT, font=('Arial', 11), padx=20, pady=5,
                  command=lambda: self.show_notification("Trash", "Trash emptied")).pack(pady=20)
+    
+    def open_sandbox_manager(self):
+        """Open sandbox manager dashboard"""
+        if hasattr(self, 'sandbox_dashboard'):
+            self.sandbox_dashboard.show()
+        else:
+            messagebox.showinfo("Sandbox Manager", 
+                              "Sandbox Manager is not available.\nPlease check that sandbox_dashboard.py is installed.")
 
 
 if __name__ == "__main__":

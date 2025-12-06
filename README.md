@@ -1,13 +1,21 @@
 # AdvancedOS
 
 ## 📚 Overview
-AdvancedOS is a comprehensive, modern desktop environment built using Python's Tkinter library. It emulates a full-featured operating system interface with a Mac-style UI, complete with a dock, menu bar, and over 1000+ features inspired by Windows, macOS, and Linux.
+AdvancedOS is a comprehensive, modern desktop environment built using Python's Tkinter library. It emulates a full-featured operating system interface with a Mac-style UI, complete with a dock, menu bar, **sandbox isolation system**, and over 1500+ features inspired by Windows, macOS, and Linux.
 
-## ✨ Version 2.0 - Major Update
+## ✨ Version 3.0 - Major Sandbox Update
 
-This version includes a complete redesign with:
-- **Mac-style UI** with dock and menu bar
-- **1000+ features** across all categories
+This version includes a complete redesign with **advanced sandbox capabilities**:
+- **🔒 Sandbox Isolation System** - Run applications in isolated environments
+- **📊 Sandbox Dashboard** - Comprehensive management interface
+- **🎯 Mission Control** - Virtual desktop manager with overview
+- **🚀 Launchpad** - Full-screen application launcher grid
+- **🔥 Hot Corners** - Trigger actions with mouse gestures
+- **👁️ Quick Look** - Preview files without opening
+- **📐 Window Snapping** - Advanced window management
+- **🎯 Focus Modes** - Productivity-focused work modes
+- **Mac-style UI** with enhanced animations and effects
+- **1500+ features** across all categories
 - **Modern theming** (Light/Dark modes)
 - **Comprehensive applications**
 - **Advanced system monitoring**
@@ -15,7 +23,37 @@ This version includes a complete redesign with:
 - **Multimedia support**
 - **Productivity suite**
 
-## 🎯 Key Features (1000+)
+## 🔒 Sandbox System (NEW!)
+
+### What is Sandboxing?
+Sandboxing creates isolated execution environments where applications run independently from the main system. This ensures:
+- **Security**: Applications can't access system files without permission
+- **Isolation**: Each sandbox has its own file system and resources
+- **Resource Control**: Set CPU, memory, and disk limits per sandbox
+- **Easy Management**: Create, start, stop, pause, and delete sandboxes
+
+### Sandbox Features
+- **🎨 Templates**: Pre-configured sandbox types (General, Development, Testing, Lightweight, Heavy)
+- **📊 Real-time Monitoring**: Track CPU, memory, and disk usage
+- **💻 Sandbox Terminal**: Execute commands within sandbox context
+- **⚙️ Resource Limits**: Control CPU (%), Memory (MB), and Disk (MB) usage
+- **📈 Statistics**: View detailed statistics and process information
+- **🔄 Lifecycle Management**: Start, stop, pause, resume operations
+
+### Sandbox Templates
+1. **General Purpose** - Standard sandbox for everyday tasks (50% CPU, 512MB RAM, 1GB disk)
+2. **Development** - Enhanced resources for coding (75% CPU, 1GB RAM, 2GB disk)
+3. **Testing** - Isolated environment for safe testing (50% CPU, 512MB RAM, 512MB disk)
+4. **Lightweight** - Minimal resources for simple tasks (25% CPU, 256MB RAM, 512MB disk)
+5. **Heavy Workload** - Maximum resources for demanding apps (100% CPU, 2GB RAM, 4GB disk)
+
+## 🎯 Key Features (1500+)
+
+### 🔒 Sandbox System (300+ features) - NEW!
+Complete isolation system with dashboard, resource management, templates, monitoring, lifecycle control, sandbox terminals, file system isolation, and security features.
+
+### 🎨 Enhanced Mac UI (200+ features) - NEW!
+Mission Control, Launchpad, Hot Corners, Quick Look, window snapping, enhanced dock with magnification, focus modes, gestures, and animations.
 
 ### 🎨 User Interface & Design (50 features)
 Mac-style menu bar, desktop icons, dock, status bar, notifications, window management, app switcher, context menus, tooltips, themes, wallpapers, animations, and more.
@@ -110,8 +148,62 @@ Games (Tic-Tac-Toe, Snake, Minesweeper, Solitaire, Sudoku, Chess), emoji picker,
 - **Ctrl+N**: New document
 - **Ctrl+F**: File explorer
 - **Ctrl+T**: Terminal
+- **Ctrl+Space**: Spotlight search
+- **Ctrl+Shift+S**: Sandbox Manager
 - **Alt+Tab**: App switcher
+- **F3**: Mission Control
+- **F4**: Launchpad
 - **F11**: Fullscreen
+
+## 🚀 Quick Start Guide
+
+### Using Sandboxes
+
+1. **Open Sandbox Manager**:
+   - Click the 🔒 icon in the dock
+   - Or press `Ctrl+Shift+S`
+   - Or go to Tools → Sandbox Manager
+
+2. **Create a Sandbox**:
+   - Click "➕ New Sandbox"
+   - Choose a name
+   - Select a template or customize resources
+   - Click "Create"
+
+3. **Manage Sandboxes**:
+   - Select a sandbox from the list
+   - Use control buttons: Start, Pause, Resume, Stop
+   - View detailed statistics
+   - Open sandbox terminal
+   - Delete when no longer needed
+
+4. **Monitor Resources**:
+   - Real-time CPU, memory, and disk usage
+   - Auto-refresh every 2 seconds
+   - Color-coded status indicators
+
+### Using Mac Features
+
+1. **Mission Control** (F3):
+   - View all virtual desktops
+   - Create new desktops
+   - Switch between desktops
+   - Manage open windows
+
+2. **Launchpad** (F4):
+   - View all applications in a grid
+   - Search for apps
+   - Click to launch
+
+3. **Hot Corners**:
+   - Go to Window → Hot Corners
+   - Assign actions to screen corners
+   - Enable and configure
+
+4. **Quick Look**:
+   - Select a file in Finder
+   - Press Space to preview
+   - Works with text, images, and more
 
 ## 🎯 Main Applications
 
@@ -143,9 +235,35 @@ Settings auto-saved to: `~/.advancedos_settings.json`
 
 - **Language**: Python 3
 - **GUI**: Tkinter
-- **Design**: Object-Oriented
-- **Code**: 2000+ lines
+- **Design**: Object-Oriented, Modular Architecture
+- **Code**: 4000+ lines across multiple modules
 - **Platforms**: Windows, macOS, Linux
+- **Architecture**:
+  - `main.py`: Core OS interface
+  - `sandbox_manager.py`: Sandbox isolation system
+  - `sandbox_dashboard.py`: Sandbox UI and controls
+  - `mac_ui_enhancements.py`: Advanced Mac-style features
+
+## 📦 File Structure
+
+```
+AdvancedOS/
+├── main.py                    # Main OS application
+├── sandbox_manager.py         # Sandbox backend logic
+├── sandbox_dashboard.py       # Sandbox UI dashboard
+├── mac_ui_enhancements.py     # Mac UI features
+├── requirements.txt           # Python dependencies
+├── README.md                  # This file
+└── .gitignore                 # Git ignore rules
+```
+
+## 🔐 Security Features
+
+- **Sandboxed Execution**: Applications run in isolated environments
+- **Resource Limits**: Prevent resource exhaustion
+- **File System Isolation**: Each sandbox has its own file system
+- **Process Management**: Track and control sandbox processes
+- **Safe Termination**: Clean shutdown of sandbox processes
 
 ## 🤝 Contributing
 
@@ -157,12 +275,55 @@ MIT License
 
 ## 📊 Statistics
 
-- **Features**: 1020+
+- **Features**: 1500+
 - **Applications**: 30+
 - **Utilities**: 50+
+- **Sandbox Templates**: 5
+- **Mac UI Enhancements**: 7 major features
 - **Themes**: 2
-- **Code Lines**: 2000+
+- **Code Lines**: 4000+
+- **Modules**: 4
+
+## 🆕 What's New in Version 3.0
+
+### Sandbox System
+- Complete isolation for running applications
+- Dashboard with real-time monitoring
+- Resource limit controls (CPU, memory, disk)
+- 5 pre-configured templates
+- Sandbox terminal for command execution
+- Process management and statistics
+
+### Enhanced Mac UI
+- Mission Control for virtual desktop management
+- Launchpad full-screen app launcher
+- Hot Corners for quick actions
+- Quick Look file preview
+- Advanced window snapping
+- Focus modes for productivity
+- Enhanced dock with magnification effects
+
+### Improvements
+- Modular architecture for better maintainability
+- Improved performance and stability
+- Enhanced keyboard shortcuts
+- Better resource management
+- Updated documentation
+
+## 💡 Use Cases
+
+1. **Development**: Create isolated environments for testing code
+2. **Security**: Run untrusted applications safely
+3. **Resource Management**: Control app resource usage
+4. **Multi-tasking**: Use virtual desktops for different workflows
+5. **Education**: Learn about OS concepts and sandboxing
+6. **Testing**: Test applications in clean environments
+7. **Productivity**: Use focus modes to minimize distractions
 
 **Built with ❤️ using Python and Tkinter**
 
-*Version 2.0 - A Complete Operating System Experience*
+*Version 3.0 - A Complete Operating System Experience with Advanced Sandboxing*
+
+## 🙏 Acknowledgments
+
+Special thanks to the Python and Tkinter communities for providing excellent tools and documentation.
