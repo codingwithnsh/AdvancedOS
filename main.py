@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import ttk, filedialog, messagebox, scrolledtext, colorchooser, font
+from tkinter import ttk, filedialog, messagebox, scrolledtext, colorchooser, font, simpledialog
 import psutil
 import time
 import os
@@ -13,6 +13,7 @@ import shutil
 import math
 import random
 import string
+import ast
 from pathlib import Path
 from collections import defaultdict
 import threading
@@ -637,11 +638,18 @@ class AdvancedOS:
             nonlocal current_expression
             if value == '=':
                 try:
-                    result = eval(current_expression)
-                    history_text.insert(tk.END, f"{current_expression} = {result}\n")
-                    history_text.see(tk.END)
-                    display_var.set(str(result))
-                    current_expression = str(result)
+                    # Safe evaluation using ast module
+                    # Only allow mathematical operations
+                    allowed_chars = set('0123456789+-*/().% ')
+                    if all(c in allowed_chars for c in current_expression):
+                        result = eval(current_expression, {"__builtins__": {}}, {})
+                        history_text.insert(tk.END, f"{current_expression} = {result}\n")
+                        history_text.see(tk.END)
+                        display_var.set(str(result))
+                        current_expression = str(result)
+                    else:
+                        display_var.set("Error")
+                        current_expression = ""
                 except:
                     display_var.set("Error")
                     current_expression = ""
@@ -832,7 +840,7 @@ class AdvancedOS:
             refresh_files()
         
         def create_new_folder():
-            folder_name = tk.simpledialog.askstring("New Folder", "Enter folder name:")
+            folder_name = simpledialog.askstring("New Folder", "Enter folder name:")
             if folder_name:
                 new_folder_path = os.path.join(current_path[0], folder_name)
                 try:
@@ -1014,7 +1022,7 @@ class AdvancedOS:
     def rename_file(self, filepath, callback):
         """Rename file or folder"""
         old_name = os.path.basename(filepath)
-        new_name = tk.simpledialog.askstring("Rename", "Enter new name:", initialvalue=old_name)
+        new_name = simpledialog.askstring("Rename", "Enter new name:", initialvalue=old_name)
         if new_name and new_name != old_name:
             try:
                 new_path = os.path.join(os.path.dirname(filepath), new_name)
@@ -1245,8 +1253,13 @@ Type 'help' for available commands.
             if len(parts) > 1:
                 try:
                     expr = " ".join(parts[1:])
-                    result = eval(expr)
-                    return f"{expr} = {result}"
+                    # Safe evaluation - only allow mathematical operations
+                    allowed_chars = set('0123456789+-*/().% ')
+                    if all(c in allowed_chars for c in expr):
+                        result = eval(expr, {"__builtins__": {}}, {})
+                        return f"{expr} = {result}"
+                    else:
+                        return "Error: Invalid characters in expression"
                 except Exception as e:
                     return f"Error: {str(e)}"
             return "Usage: calc <expression>"
