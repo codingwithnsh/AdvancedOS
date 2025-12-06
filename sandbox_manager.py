@@ -63,7 +63,7 @@ class Sandbox:
             self.save_config()
             
             return True
-        except Exception as e:
+        except (OSError, PermissionError) as e:
             print(f"Error creating sandbox: {e}")
             return False
     
@@ -92,10 +92,10 @@ class Sandbox:
                 try:
                     proc.terminate()
                     proc.wait(timeout=3)
-                except:
+                except (subprocess.TimeoutExpired, ProcessLookupError):
                     try:
                         proc.kill()
-                    except:
+                    except (ProcessLookupError, PermissionError):
                         pass
                 finally:
                     if proc in self.processes:
@@ -118,7 +118,7 @@ class Sandbox:
             for proc in self.processes:
                 try:
                     proc.suspend()
-                except:
+                except (AttributeError, ProcessLookupError, PermissionError):
                     pass
             
             self.status = "paused"
@@ -138,7 +138,7 @@ class Sandbox:
             for proc in self.processes:
                 try:
                     proc.resume()
-                except:
+                except (AttributeError, ProcessLookupError, PermissionError):
                     pass
             
             self.status = "running"
@@ -210,7 +210,7 @@ class Sandbox:
                     p = psutil.Process(proc.pid)
                     total_cpu += p.cpu_percent(interval=0.1)
                     total_memory += p.memory_info().rss / (1024 * 1024)  # MB
-                except:
+                except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
                     if proc in self.processes:
                         self.processes.remove(proc)
             

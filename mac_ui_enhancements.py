@@ -358,11 +358,11 @@ class QuickLook:
             text_widget.pack(fill=tk.BOTH, expand=True)
             
             try:
-                with open(filepath, 'r') as f:
+                with open(filepath, 'r', encoding='utf-8') as f:
                     text_widget.insert('1.0', f.read())
                 text_widget.config(state='disabled')
-            except:
-                text_widget.insert('1.0', "Cannot preview this file")
+            except (UnicodeDecodeError, FileNotFoundError, PermissionError, OSError) as e:
+                text_widget.insert('1.0', f"Cannot preview this file: {str(e)}")
         
         elif ext in ['.png', '.jpg', '.jpeg', '.gif', '.bmp']:
             # Image preview
@@ -375,8 +375,8 @@ class QuickLook:
                 label = tk.Label(content, image=photo, bg='#1a1a1a')
                 label.image = photo  # Keep reference
                 label.pack(expand=True)
-            except:
-                tk.Label(content, text="Cannot preview image", bg='#1a1a1a',
+            except (ImportError, IOError, OSError) as e:
+                tk.Label(content, text=f"Cannot preview image: {str(e)}", bg='#1a1a1a',
                         fg='white', font=('Arial', 14)).pack(expand=True)
         
         else:
