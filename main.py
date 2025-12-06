@@ -38,10 +38,12 @@ try:
     from mac_ui_enhancements import (MissionControl, Launchpad, HotCorners, 
                                      DockEnhancer, QuickLook, WindowSnapping, FocusModes)
     from advanced_features import AppStore, TimeMachine, VoiceAssistant, CloudSync
+    from developer_tools import DeveloperConsole, PackageManager, SystemCleaner, ThemeEditor
 except ImportError:
     SandboxDashboard = MissionControl = Launchpad = None
     HotCorners = DockEnhancer = QuickLook = WindowSnapping = FocusModes = None
     AppStore = TimeMachine = VoiceAssistant = CloudSync = None
+    DeveloperConsole = PackageManager = SystemCleaner = ThemeEditor = None
 
 class AdvancedOS:
     def __init__(self, root):
@@ -88,6 +90,13 @@ class AdvancedOS:
             self.time_machine = TimeMachine(self.root, self)
             self.voice_assistant = VoiceAssistant(self.root, self)
             self.cloud_sync = CloudSync(self.root, self)
+        
+        # Initialize Developer Tools
+        if DeveloperConsole:
+            self.developer_console = DeveloperConsole(self.root, self)
+            self.package_manager = PackageManager(self.root, self)
+            self.system_cleaner = SystemCleaner(self.root, self)
+            self.theme_editor = ThemeEditor(self.root, self)
         
         # Apply theme
         self.apply_theme()
@@ -218,6 +227,11 @@ class AdvancedOS:
                 ('Time Machine', lambda: self.time_machine.show() if hasattr(self, 'time_machine') else None),
                 ('Voice Assistant', lambda: self.voice_assistant.show() if hasattr(self, 'voice_assistant') else None),
                 ('Cloud Sync', lambda: self.cloud_sync.show_settings() if hasattr(self, 'cloud_sync') else None),
+                ('---', None),
+                ('Developer Console', lambda: self.developer_console.show() if hasattr(self, 'developer_console') else None),
+                ('Package Manager', lambda: self.package_manager.show() if hasattr(self, 'package_manager') else None),
+                ('System Cleaner', lambda: self.system_cleaner.show() if hasattr(self, 'system_cleaner') else None),
+                ('Theme Editor', lambda: self.theme_editor.show() if hasattr(self, 'theme_editor') else None),
             ]),
         ]
         
