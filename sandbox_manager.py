@@ -77,7 +77,7 @@ class Sandbox:
             self.stats['last_started'] = datetime.now().isoformat()
             self.save_config()
             return True
-        except Exception as e:
+        except (OSError, IOError) as e:
             print(f"Error starting sandbox: {e}")
             return False
     
@@ -104,7 +104,7 @@ class Sandbox:
             self.status = "stopped"
             self.save_config()
             return True
-        except Exception as e:
+        except (OSError, IOError, ProcessLookupError) as e:
             print(f"Error stopping sandbox: {e}")
             return False
     
@@ -124,7 +124,7 @@ class Sandbox:
             self.status = "paused"
             self.save_config()
             return True
-        except Exception as e:
+        except (OSError, IOError) as e:
             print(f"Error pausing sandbox: {e}")
             return False
     
@@ -144,7 +144,7 @@ class Sandbox:
             self.status = "running"
             self.save_config()
             return True
-        except Exception as e:
+        except (OSError, IOError) as e:
             print(f"Error resuming sandbox: {e}")
             return False
     
