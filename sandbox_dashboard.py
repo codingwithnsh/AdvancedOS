@@ -473,9 +473,10 @@ class SandboxDashboard:
                 update_description()
                 update_limits()
             
-            btn_frame.bind('<Button-1>', lambda e, tid=template_id, frame=btn_frame: select_template(tid, frame))
+            # Bind click events - using default arguments to properly capture loop variables
+            btn_frame.bind('<Button-1>', lambda e, t=template_id, f=btn_frame: select_template(t, f))
             for child in btn_frame.winfo_children():
-                child.bind('<Button-1>', lambda e, tid=template_id, frame=btn_frame: select_template(tid, frame))
+                child.bind('<Button-1>', lambda e, t=template_id, f=btn_frame: select_template(t, f))
             
             template_buttons.append(btn_frame)
             

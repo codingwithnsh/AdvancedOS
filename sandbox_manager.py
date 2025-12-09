@@ -10,6 +10,7 @@ import subprocess
 import threading
 import time
 import uuid
+import traceback
 from pathlib import Path
 from datetime import datetime
 import psutil
@@ -70,7 +71,6 @@ class Sandbox:
             return True
         except (OSError, PermissionError) as e:
             print(f"Error creating sandbox: {e}")
-            import traceback
             traceback.print_exc()
             return False
     
@@ -323,7 +323,6 @@ class SandboxManager:
             return sandbox
         except Exception as e:
             print(f"Error creating sandbox: {e}")
-            import traceback
             traceback.print_exc()
             return None
     
