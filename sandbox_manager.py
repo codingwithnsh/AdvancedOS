@@ -51,20 +51,27 @@ class Sandbox:
         """Create sandbox directory structure"""
         try:
             # Create directories
+            print(f"Creating sandbox directories at: {self.base_path}")
             self.base_path.mkdir(parents=True, exist_ok=True)
             self.root_path.mkdir(exist_ok=True)
             self.data_path.mkdir(exist_ok=True)
             
             # Create subdirectories
             for subdir in ['bin', 'home', 'tmp', 'lib', 'usr', 'var']:
-                (self.root_path / subdir).mkdir(exist_ok=True)
+                subdir_path = self.root_path / subdir
+                subdir_path.mkdir(exist_ok=True)
+                print(f"Created subdirectory: {subdir_path}")
             
             # Save configuration
-            self.save_config()
+            if not self.save_config():
+                print("Warning: Failed to save sandbox configuration")
             
+            print(f"Sandbox created successfully: {self.name} ({self.id})")
             return True
         except (OSError, PermissionError) as e:
             print(f"Error creating sandbox: {e}")
+            import traceback
+            traceback.print_exc()
             return False
     
     def start(self):
@@ -294,23 +301,30 @@ class SandboxManager:
         try:
             # Generate unique ID
             sandbox_id = str(uuid.uuid4())[:8]
+            print(f"Creating new sandbox: {name} (ID: {sandbox_id}, Type: {sandbox_type})")
             
             # Create sandbox object
             sandbox = Sandbox(sandbox_id, name, sandbox_type, config)
             
             # Create sandbox structure
             if not sandbox.create():
+                print(f"Failed to create sandbox structure for: {name}")
                 return None
             
             # Add to manager
             self.sandboxes[sandbox_id] = sandbox
+            print(f"Added sandbox to manager: {name} ({sandbox_id})")
             
             # Save configuration
-            self.save_config()
+            if not self.save_config():
+                print("Warning: Failed to save manager configuration")
             
+            print(f"Sandbox creation completed successfully: {name}")
             return sandbox
         except Exception as e:
             print(f"Error creating sandbox: {e}")
+            import traceback
+            traceback.print_exc()
             return None
     
     def get_sandbox(self, sandbox_id):

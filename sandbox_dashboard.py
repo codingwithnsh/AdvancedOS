@@ -1,5 +1,6 @@
 """
 Sandbox Dashboard - GUI for creating, managing, and monitoring sandboxes
+Enhanced with modern UI elements and better user experience
 """
 
 import tkinter as tk
@@ -9,7 +10,7 @@ import threading
 
 
 class SandboxDashboard:
-    """Dashboard for managing sandboxes"""
+    """Dashboard for managing sandboxes with modern UI"""
     
     def __init__(self, root, os_instance):
         self.root = root
@@ -17,6 +18,7 @@ class SandboxDashboard:
         self.manager = SandboxManager()
         self.refresh_interval = 2000  # ms
         self.auto_refresh = True
+        self.first_time_user = len(self.manager.list_sandboxes()) == 0
     
     def show(self):
         """Show sandbox dashboard"""
@@ -299,6 +301,10 @@ class SandboxDashboard:
         # Initial load
         self.refresh_sandbox_list(sandbox_list)
         
+        # Show quick start guide for first-time users
+        if self.first_time_user:
+            self.show_quick_start_guide(dashboard)
+        
         # Auto-refresh
         def auto_refresh_loop():
             if self.auto_refresh and dashboard.winfo_exists():
@@ -320,24 +326,46 @@ class SandboxDashboard:
         for item in treeview.get_children():
             treeview.delete(item)
         
-        # Add sandboxes
-        for sb in self.manager.list_sandboxes():
-            sb.update_stats()
-            
-            status_icon = {
-                'running': '🟢',
-                'paused': '🟡',
-                'stopped': '🔴'
-            }.get(sb.status, '⚪')
-            
+        # Get all sandboxes
+        sandboxes = self.manager.list_sandboxes()
+        
+        # If no sandboxes, show empty state message
+        if not sandboxes:
+            # Insert a placeholder item
             treeview.insert('', tk.END, values=(
-                sb.name,
-                sb.type.title(),
-                f"{status_icon} {sb.status.title()}",
-                f"{sb.stats['cpu_usage']:.1f}",
-                f"{sb.stats['memory_usage']:.0f} MB",
-                f"{sb.stats['disk_usage']:.0f} MB"
-            ))
+                "No virtual machines created yet",
+                "—",
+                "Click 'Create New Sandbox' to get started",
+                "—",
+                "—",
+                "—"
+            ), tags=('empty',))
+            
+            # Configure tag to center and style the empty state
+            treeview.tag_configure('empty', foreground='#888888', font=('Arial', 10, 'italic'))
+            return
+        
+        # Add sandboxes
+        for sb in sandboxes:
+            try:
+                sb.update_stats()
+                
+                status_icon = {
+                    'running': '🟢',
+                    'paused': '🟡',
+                    'stopped': '🔴'
+                }.get(sb.status, '⚪')
+                
+                treeview.insert('', tk.END, values=(
+                    sb.name,
+                    sb.type.title(),
+                    f"{status_icon} {sb.status.title()}",
+                    f"{sb.stats['cpu_usage']:.1f}",
+                    f"{sb.stats['memory_usage']:.0f} MB",
+                    f"{sb.stats['disk_usage']:.0f} MB"
+                ))
+            except Exception as e:
+                print(f"Error adding sandbox {sb.name} to list: {e}")
     
     def create_sandbox_dialog(self, parent):
         """Show dialog to create new sandbox"""
@@ -865,3 +893,93 @@ Available commands:
                 command_var.set("")
         
         command_entry.bind('<Return>', execute_command)
+    
+    def show_quick_start_guide(self, parent):
+        """Show quick start guide for first-time users"""
+        guide = tk.Toplevel(parent)
+        guide.title("Welcome to Sandbox Manager")
+        guide.geometry("600x500")
+        guide.configure(bg='#1a1a1a' if self.os.theme_mode == 'dark' else '#f5f5f5')
+        guide.transient(parent)
+        
+        # Header
+        header = tk.Frame(guide, bg='#2d2d30' if self.os.theme_mode == 'dark' else '#ffffff', height=80)
+        header.pack(fill=tk.X)
+        header.pack_propagate(False)
+        
+        tk.Label(header, text="🚀 Welcome to Sandbox Manager!", 
+                bg='#2d2d30' if self.os.theme_mode == 'dark' else '#ffffff',
+                fg='#ffffff' if self.os.theme_mode == 'dark' else '#1a1a1a',
+                font=('Arial', 18, 'bold')).pack(pady=(20, 5))
+        
+        tk.Label(header, text="Create isolated virtual environments for your applications", 
+                bg='#2d2d30' if self.os.theme_mode == 'dark' else '#ffffff',
+                fg='#888888',
+                font=('Arial', 10)).pack()
+        
+        # Content
+        content = tk.Frame(guide, bg='#1a1a1a' if self.os.theme_mode == 'dark' else '#f5f5f5')
+        content.pack(fill=tk.BOTH, expand=True, padx=30, pady=20)
+        
+        guide_text = """
+🔒 What are Sandboxes?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Sandboxes are isolated virtual machines that provide:
+
+  ✅ Security - Run untrusted applications safely
+  ✅ Isolation - Each sandbox has its own file system
+  ✅ Resource Control - Set CPU, memory, and disk limits
+  ✅ Easy Management - Create, start, stop, and delete with ease
+
+
+📋 Getting Started
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1. Click "Create New Sandbox" button
+2. Choose a name for your virtual machine
+3. Select a template (or customize resources)
+4. Click "Create Virtual Machine"
+5. Use the control panel to manage your sandbox
+
+
+🎯 Available Templates
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  🔧 General Purpose - For everyday tasks
+  💻 Development - Enhanced resources for coding
+  🧪 Testing - Isolated environment for safe testing
+  ⚡ Lightweight - Minimal resources for simple tasks
+  🚀 Heavy Workload - Maximum resources for demanding apps
+
+
+💡 Tips
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  • Use the Terminal feature to execute commands in a sandbox
+  • Monitor resource usage in real-time
+  • Pause sandboxes when not in use to save resources
+  • Delete sandboxes you no longer need to free up space
+        """
+        
+        text_widget = scrolledtext.ScrolledText(content,
+                                               bg='#2d2d30' if self.os.theme_mode == 'dark' else '#ffffff',
+                                               fg='#ffffff' if self.os.theme_mode == 'dark' else '#1a1a1a',
+                                               font=('Arial', 10), relief=tk.FLAT, wrap=tk.WORD)
+        text_widget.pack(fill=tk.BOTH, expand=True)
+        text_widget.insert('1.0', guide_text)
+        text_widget.config(state='disabled')
+        
+        # Buttons
+        btn_frame = tk.Frame(guide, bg='#1a1a1a' if self.os.theme_mode == 'dark' else '#f5f5f5')
+        btn_frame.pack(pady=(0, 20))
+        
+        tk.Button(btn_frame, text="Create My First Sandbox",
+                 command=lambda: (guide.destroy(), self.create_sandbox_dialog(parent)),
+                 bg='#007acc', fg='white', relief=tk.FLAT,
+                 font=('Arial', 11, 'bold'), padx=25, pady=10,
+                 cursor='hand2').pack(side=tk.LEFT, padx=5)
+        
+        tk.Button(btn_frame, text="Close",
+                 command=guide.destroy,
+                 bg='#3c3c3c' if self.os.theme_mode == 'dark' else '#d0d0d0',
+                 fg='#ffffff' if self.os.theme_mode == 'dark' else '#1a1a1a',
+                 relief=tk.FLAT,
+                 font=('Arial', 11), padx=25, pady=10,
+                 cursor='hand2').pack(side=tk.LEFT, padx=5)
