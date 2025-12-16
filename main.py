@@ -2106,8 +2106,24 @@ Python: {sys.version.split()[0]}
         if hasattr(self, 'sandbox_dashboard'):
             self.sandbox_dashboard.show()
         else:
-            messagebox.showinfo("Sandbox Manager", 
-                              "Sandbox Manager is not available.\nPlease check that sandbox_dashboard.py is installed.")
+            # Show error with more helpful message
+            error_dialog = tk.Toplevel(self.root)
+            error_dialog.title("Sandbox Manager Not Available")
+            error_dialog.geometry("400x200")
+            error_dialog.configure(bg=self.bg_color)
+            
+            tk.Label(error_dialog, text="⚠️ Sandbox Manager Not Available",
+                    bg=self.bg_color, fg=self.fg_color,
+                    font=('Arial', 14, 'bold')).pack(pady=20)
+            
+            tk.Label(error_dialog, 
+                    text="The Sandbox Manager module is not loaded.\n\nPlease ensure sandbox_dashboard.py is present\nin the application directory.",
+                    bg=self.bg_color, fg=self.fg_color,
+                    font=('Arial', 10), justify=tk.CENTER).pack(pady=10)
+            
+            tk.Button(error_dialog, text="OK", command=error_dialog.destroy,
+                     bg=self.accent_color, fg='white', relief=tk.FLAT,
+                     font=('Arial', 11), padx=30, pady=8).pack(pady=20)
 
 
 if __name__ == "__main__":
