@@ -1,7 +1,7 @@
-# AdvancedOS
+# SysPulse
 
 ## 📚 Overview
-AdvancedOS is a comprehensive, modern desktop environment built using Python's Tkinter library. It emulates a full-featured operating system interface with a Mac-style UI, complete with a dock, menu bar, **sandbox isolation system**, **app store**, **time machine backups**, **voice assistant**, **cloud sync**, **developer tools**, and over **2500+ features** inspired by Windows, macOS, and Linux.
+SysPulse is a comprehensive, modern desktop environment built using Python's Tkinter library. It emulates a full-featured operating system interface with a Mac-style UI, complete with a dock, menu bar, **sandbox isolation system**, **app store**, **time machine backups**, **voice assistant**, **cloud sync**, **developer tools**, and over **2500+ features** inspired by Windows, macOS, and Linux.
 
 ## ✨ Version 3.0 - The World's Best Python OS
 
